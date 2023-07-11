@@ -10,6 +10,8 @@ import {
 import { Bar } from 'react-chartjs-2';
 
 import dataisp from '../data/data';
+import { useEffect, useState } from 'react';
+import "../styles/Grafico.css"
 
 ChartJS.register(
     CategoryScale,
@@ -20,8 +22,25 @@ ChartJS.register(
     Legend
 );
 
+function Grafico( {selectedOption} ) {
+    let defaultChart
+    defaultChart = {
+        labels: [0],
+        datasets: [
+            {
+                label: `Qtd. de ${selectedOption}`,
+                data: dataisp.map((data) => data[selectedOption]),
+                
+                backgroundColor: [
+                    'rgba(255, 255, 255, 0.6)'
+                ],
+                borderWidth: 1,
+            }
+        ]
+    }
+    const [chartData, setChartData] = useState(defaultChart);
 
-function Grafico(props) {
+    useEffect(() => {
     const ano = dataisp
         .map((data) => data.ano)
         .filter((ano, index, array) => array.indexOf(ano) === index);
@@ -30,14 +49,14 @@ function Grafico(props) {
         .map((data) => data.mes)
         .filter((mes, index, array) => array.indexOf(mes) === index);
 
-
+    
     const data = {
-        labels: mes,
+        labels: ano,
         datasets: [
             {
-                label: 'Popularity of colours',
-                data: dataisp.map((data) => data.latrocinio),
-                // you can set indiviual colors for each bar
+                label: `Qtd. de ${selectedOption}`,
+                data: dataisp.map((data) => data[selectedOption]),
+                
                 backgroundColor: [
                     'rgba(255, 255, 255, 0.6)'
                 ],
@@ -45,6 +64,9 @@ function Grafico(props) {
             }
         ]
     }
+    setChartData(data);
+}, [selectedOption])
+
     const options = {
         responsive: true,
         plugins: {
@@ -52,16 +74,19 @@ function Grafico(props) {
                 position: 'top',
             },
             title: {
-                display: true,
-                text: 'Chart.js Bar Chart',
+                display: true
+               
             },
         },
     }
     return (
-        <>
-            <h1>grafico ai, {props.valorProp} meu</h1>
-            <Bar data={data} options={options} />
-        </>
+        <div className='grafico'>
+            <h1>Gráfico de {selectedOption}</h1>
+            <div className="chart-container">
+            <Bar data={chartData} options={options} />
+            </div>
+        </div>
+        
     )
 }
 export default Grafico

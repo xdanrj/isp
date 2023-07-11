@@ -1,13 +1,17 @@
-
+import { useState } from 'react';
 import './App.css'
 import Grafico from './components/grafico'
-import Selecionador from './components/Selecionador'
+import SelecionadorChaves from './components/SelecionadorChaves'
+
 
 function App() {
+  const [selectedOption, setSelectedOption] = useState('latrocinio');
   return (
     <>
-      <Grafico valorProp={selectedOption} />
-      <Selecionador />
+      <Grafico selectedOption={selectedOption} />
+     
+      <SelecionadorChaves setSelectedOption={setSelectedOption} />
+      
     </>
   )
 }
